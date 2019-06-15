@@ -3,7 +3,7 @@ Chromium无头浏览器测试Demo
 
 说明：
 
-1. 开发（完成）平台：**Win10 x64**；**.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
+1. 开发（完成）平台：**Win10 x64 / Win7 x64**；**.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
 
 2. 参考：
 
@@ -13,9 +13,11 @@ Chromium无头浏览器测试Demo
 
    ③ https://www.cnblogs.com/VAllen/p/9234675.html?tdsourcetag=s_pcqq_aiomsg
 
-   ④ https://github.com/kblok/puppeteer-sharp
+   ④ https://github.com/kblok/puppeteer-sharp 【puppeteer-sharp GitHub官网】
 
-   ⑤ http://www.puppeteersharp.com/api/index.html
+   ⑤ http://www.puppeteersharp.com/api/index.html 【puppeteer-sharp 官网API】
+
+   ⑥ https://github.com/kblok/puppeteer-sharp/issues/1162 【兼容 Win7 环境下启动 Chromium】
 
 3. 可能会遇到 Chromium 无头浏览器 下载不动的情况，不用慌。将 **chromium-Win64-662092.zip** 这个压缩包解压后，把里面的 **.local-chromium** 文件夹，整体复制到程序的运行目录下（ 也就是 **bin\Debug** 或 **bin\Release** ）。
 
