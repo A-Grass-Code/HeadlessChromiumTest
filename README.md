@@ -1,5 +1,5 @@
 # HeadlessChromiumTest
-Chromium无头浏览器测试Demo
+Chromium 无头浏览器测试 Demo
 
 说明：
 
@@ -7,7 +7,7 @@ Chromium无头浏览器测试Demo
 
 2. 参考：
 
-   ① https://zhaoqize.github.io/puppeteer-api-zh_CN/#?product=Puppeteer&version=v1.17.0&show=api-class-puppeteer&tdsourcetag=s_pcqq_aiomsg
+   ① https://www.cnblogs.com/TTonly/p/10920294.html?tdsourcetag=s_pcqq_aiomsg
 
    ② https://www.cnblogs.com/shanyou/archive/2019/03/09/10500049.html?tdsourcetag=s_pcqq_aiomsg
 
@@ -19,9 +19,10 @@ Chromium无头浏览器测试Demo
 
    ⑥ https://github.com/kblok/puppeteer-sharp/issues/1162 【兼容 Win7 环境下启动 Chromium】
 
-3. 可能会遇到 Chromium 无头浏览器 下载不动的情况，不用慌。将 **chromium-Win64-662092.zip** 这个压缩包解压后，把里面的 **.local-chromium** 文件夹，整体复制到程序的运行目录下（ 也就是 **bin\Debug** 或 **bin\Release** ）。
+3. 可能会遇到 Chromium 无头浏览器 下载不动的情况，不用慌。将 **`chromium-Win64-662092.zip`** 这个压缩包解压后，把里面的 **`.local-chromium`** 文件夹，整体复制到程序的运行目录下（ 也就是 **`bin\Debug`** 或 **`bin\Release`** ）。
 
-   **chromium-Win64-662092.zip** ***百度云盘分享地址***  如下：
+   - **`chromium-Win64-662092.zip`** ***百度云盘分享地址***  如下：
 
-   链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ 
-   提取码：l83n 
+   - 链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ
+   
+   - 提取码：l83n
