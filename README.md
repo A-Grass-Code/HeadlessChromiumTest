@@ -3,7 +3,9 @@ Chromium 无头浏览器测试 Demo
 
 说明：
 
-1. 开发（完成）平台：**Win10 x64 / Win7 x64**；**.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
+1. 开发（完成）平台：**Windows 10 x64 / Windows 7 x64 / Windows Server 2008 R2 x64**；
+
+   **.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
 
 2. 参考：
 
@@ -26,5 +28,5 @@ Chromium 无头浏览器测试 Demo
    - **`chromium-Win64-662092.zip`** ***百度云盘分享地址***  如下：
 
    - 链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ
-   
+
    - 提取码：l83n
