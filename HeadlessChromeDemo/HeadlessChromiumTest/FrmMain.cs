@@ -199,7 +199,13 @@ namespace HeadlessChromiumTest
                     this.btn_chromiumTest.Enabled = true;
                 }));
 
-                WriteCreate(_programRoot + $"SaveHtmlPage\\{DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss")}.html", htmlContent);
+                string path = _programRoot + $"SaveHtmlPage\\{DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss")}.html";
+                WriteCreate(path, htmlContent);
+
+                this.Invoke(new Action(() =>
+                {
+                    this.rTxt_log.AppendText($"测试页面已保存成功。位置 ==> {path} \n");
+                }));
             });
         }
 
