@@ -26,7 +26,6 @@ Chromium 无头浏览器测试 Demo
 3. 可能会遇到 Chromium 无头浏览器 下载不动的情况，不用慌。将 **`chromium-Win64-662092.zip`** 这个压缩包解压后，把里面的 **`.local-chromium`** 文件夹，整体复制到程序的运行目录下（ 也就是 **`bin\Debug`** 或 **`bin\Release`** ）。
 
    - **`chromium-Win64-662092.zip`** ***百度云盘分享地址***  如下：
-- 链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ
+   - 链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ
    - 提取码：l83n
-
 4. 从 **GitHub** 上获取代码后，可用 **VS 2017** 直接打开；还原 **NuGet** 包，并重新生成 **解决方案** 或 **项目**，即可调试运行。
