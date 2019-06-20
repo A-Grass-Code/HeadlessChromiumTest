@@ -27,10 +27,22 @@ namespace HeadlessChromiumTest
         /// </summary>
         private const string _testUrl = "https://hanyu.baidu.com/s?wd=%E8%85%BE&ptype=zici";
 
+
         /// <summary>
-        /// 程序根目录
+        /// 保存页面的目录
         /// </summary>
-        private static readonly string _programRoot = AppDomain.CurrentDomain.BaseDirectory;
+        private string _savePageDirectory
+        {
+            get
+            {
+                string path = AppDomain.CurrentDomain.BaseDirectory + "SavePage\\";
+                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
+                return path;
+            }
+        }
 
 
 
@@ -39,7 +51,7 @@ namespace HeadlessChromiumTest
         /// </summary>
         /// <param name="isDisplay">是否显示界面</param>
         /// <returns></returns>
-        private async Task<string> TestHeadlessChromiumAsync(bool isDisplay = true)
+        private async Task TestHeadlessChromiumAsync(bool isDisplay = true)
         {
             this.Invoke(new Action(() =>
             {
@@ -95,15 +107,23 @@ namespace HeadlessChromiumTest
                     // 导航到 url 页
                     await page.GoToAsync(_testUrl);
 
-                    // 获取并返回页面的HTML内容
+                    string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+                    // 保存截图
+                    await page.ScreenshotAsync($"{_savePageDirectory}{fileName}.png");
+                    // 获取并返回页面的 Html 内容
                     htmlContent = await page.GetContentAsync();
+                    // 保存 Html 内容
+                    WriteCreate($"{_savePageDirectory}{fileName}.html", htmlContent);
+
+                    this.Invoke(new Action(() =>
+                    {
+                        this.rTxt_log.AppendText($"测试页面已保存成功。目录 ==> {_savePageDirectory} \n");
+                    }));
 
                     // 界面停留，给开发人员看
                     await Task.Delay(14 * 1000);
                 }
             }
-
-            return htmlContent;
         }
 
         /// <summary>
@@ -191,20 +211,12 @@ namespace HeadlessChromiumTest
                     this.rTxt_log.AppendText("开始测试无头浏览器... \n");
                 }));
 
-                string htmlContent = await TestHeadlessChromiumAsync();
+                await TestHeadlessChromiumAsync();
 
                 this.Invoke(new Action(() =>
                 {
                     this.rTxt_log.AppendText("无头浏览器测试完成。 \n");
                     this.btn_chromiumTest.Enabled = true;
-                }));
-
-                string path = _programRoot + $"SaveHtmlPage\\{DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss")}.html";
-                WriteCreate(path, htmlContent);
-
-                this.Invoke(new Action(() =>
-                {
-                    this.rTxt_log.AppendText($"测试页面已保存成功。位置 ==> {path} \n");
                 }));
             });
         }
