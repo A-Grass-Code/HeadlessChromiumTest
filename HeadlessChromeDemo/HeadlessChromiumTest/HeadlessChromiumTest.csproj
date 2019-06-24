@@ -127,7 +127,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ChromiumBrowser.cs" />
     <Compile Include="Common\OSHelper.cs" />
+    <Compile Include="Common\SaveContent.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>

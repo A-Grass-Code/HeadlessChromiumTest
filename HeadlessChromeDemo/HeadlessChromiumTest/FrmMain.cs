@@ -27,7 +27,6 @@ namespace HeadlessChromiumTest
         /// </summary>
         private const string _testUrl = "https://hanyu.baidu.com/s?wd=%E8%85%BE&ptype=zici";
 
-
         /// <summary>
         /// 保存页面的目录
         /// </summary>
@@ -43,7 +42,6 @@ namespace HeadlessChromiumTest
                 return path;
             }
         }
-
 
 
         /// <summary>
@@ -150,7 +148,7 @@ namespace HeadlessChromiumTest
         }
 
 
-
+        // 无头浏览器测试
         private void btn_chromiumTest_Click(object sender, EventArgs e)
         {
             this.btn_chromiumTest.Enabled = false;
@@ -221,10 +219,35 @@ namespace HeadlessChromiumTest
             });
         }
 
-
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Environment.Exit(0);
+        }
+
+
+
+        // 无头浏览器测试，封装版
+        private void btn_chromiumTest_Encapsulated_Click(object sender, EventArgs e)
+        {
+            Task.Run(async () =>
+            {
+                LaunchOptions launchOptions = await ChromiumBrowser.ChromiumLaunchOptions(true, true);
+                using (Browser browser = await Puppeteer.LaunchAsync(launchOptions))
+                {
+                    using (Page page = await ChromiumBrowser.NewPageAndInitAsync(browser))
+                    {
+                        // 导航到 url 页
+                        await page.GoToAsync(_testUrl);
+
+                        string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+                        // 保存截图
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, $"{SaveContent.SaveContentDirectory}{fileName}.png");
+                        // 获取并保存页面的 Html 内容
+                        string htmlContent = await page.GetContentAsync();
+                        SaveContent.SaveContentByCreate(htmlContent, $"{SaveContent.SaveContentDirectory}{fileName}.html");
+                    }
+                }
+            });
         }
 
 
