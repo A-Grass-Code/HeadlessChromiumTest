@@ -21,7 +21,7 @@ Chromium 无头浏览器测试 Demo
 
    ⑥ https://github.com/kblok/puppeteer-sharp/issues/1162 【兼容 Win7 环境下启动 Chromium】
 
-   ⑦ https://zhaoqize.github.io/puppeteer-api-zh_CN/#?product=Puppeteer&version=v1.17.0&show=api-class-puppeteer 【puppeteer node.js API】
+   ⑦ https://zhaoqize.github.io/puppeteer-api-zh_CN/#/ 【puppeteer node.js API】
 
 3. 可能会遇到 Chromium 无头浏览器 下载不动的情况，不用慌。将 **`chromium-Win64-662092.zip`** 这个压缩包解压后，把里面的 **`.local-chromium`** 文件夹，整体复制到程序的运行目录下（ 也就是 **`bin\Debug`** 或 **`bin\Release`** ）。
 
