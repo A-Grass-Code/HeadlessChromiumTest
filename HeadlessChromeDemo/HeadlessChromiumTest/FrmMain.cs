@@ -151,8 +151,11 @@ namespace HeadlessChromiumTest
         // 无头浏览器测试
         private void btn_chromiumTest_Click(object sender, EventArgs e)
         {
-            this.btn_chromiumTest.Enabled = false;
-            this.rTxt_log.Clear();
+            this.Invoke(new Action(() =>
+            {
+                this.btn_chromiumTest.Enabled = false;
+                this.rTxt_log.Clear();
+            }));
 
             Task.Run(async () =>
             {
@@ -229,6 +232,11 @@ namespace HeadlessChromiumTest
         // 无头浏览器测试，封装版
         private void btn_chromiumTest_Encapsulated_Click(object sender, EventArgs e)
         {
+            this.Invoke(new Action(() =>
+            {
+                this.btn_chromiumTest_Encapsulated.Enabled = false;
+            }));
+
             Task.Run(async () =>
             {
                 LaunchOptions launchOptions = await ChromiumBrowser.ChromiumLaunchOptions(true, true);
@@ -240,13 +248,21 @@ namespace HeadlessChromiumTest
                         await page.GoToAsync(_testUrl);
 
                         string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
-                        // 保存截图
-                        await ChromiumBrowser.SavePageScreenshotAsync(page, $"{SaveContent.SaveContentDirectory}{fileName}.png");
+                        // 保存截图 1
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, $"{SaveContent.SaveContentDirectory}{fileName}-1.png");
+                        // 保存截图 2
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, null, $"{SaveContent.SaveContentDirectory}{fileName}-2.png");
                         // 获取并保存页面的 Html 内容
                         string htmlContent = await page.GetContentAsync();
                         SaveContent.SaveContentByCreate(htmlContent, $"{SaveContent.SaveContentDirectory}{fileName}.html");
                     }
                 }
+            }).ContinueWith(t =>
+            {
+                this.Invoke(new Action(() =>
+                {
+                    this.btn_chromiumTest_Encapsulated.Enabled = true;
+                }));
             });
         }
 

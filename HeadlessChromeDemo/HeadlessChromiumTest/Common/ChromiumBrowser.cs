@@ -354,6 +354,46 @@ namespace HeadlessChromiumTest.Common
             await page.ScreenshotAsync(path, new ScreenshotOptions() { FullPage = isFullPage });
         }
 
+        /// <summary>
+        /// 保存 Page 页面截图
+        /// </summary>
+        /// <param name="page">Chromium 的 Page 对象</param>
+        /// <param name="screenshotOptions">ScreenshotOptions 截图选项 【 如果传入空值，则自动实例化一个 ScreenshotOptions 对象 】</param>
+        /// <param name="path">保存截图的绝对路径 【 默认值：程序运行目录\SaveContent\{当前时间}.png 】</param>
+        /// <returns></returns>
+        public static async Task SavePageScreenshotAsync(Page page, ScreenshotOptions screenshotOptions,
+            string path = null)
+        {
+            if (page == null)
+            {
+                throw new Exception("传入了一个空的 Chromium Page 对象。Page == null");
+            }
+
+            if (screenshotOptions == null)
+            {
+                screenshotOptions = new ScreenshotOptions();
+            }
+
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                path = SaveContent.SaveContentDirectory + $"{DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss.ffff")}.png";
+            }
+            else
+            {
+                if (!Directory.Exists(Path.GetDirectoryName(path)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path));
+                }
+
+                if (Path.GetExtension(path).ToLower() != ".png")
+                {
+                    path += ".png";
+                }
+            }
+
+            await page.ScreenshotAsync(path, screenshotOptions);
+        }
+
 
     }
 }
