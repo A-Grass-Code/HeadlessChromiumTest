@@ -13,7 +13,7 @@ namespace HeadlessChromiumTest.Common
     {
 
         /// <summary>
-        /// <para>设置一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2000</para>
+        /// <para>设置一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>异常可能：程序运行目录下 Chromium 浏览器不可用。</para>
         /// </summary>
         /// <param name="checkIsDownload">检查 是否下载 Chromium 浏览器；默认 false</param>
@@ -129,7 +129,7 @@ namespace HeadlessChromiumTest.Common
 
 
         /// <summary>
-        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2000</para>
+        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>检查不下载</para>
         /// <para>Chromium 运行时显示界面</para>
         /// <para>自动传入 "--no-sandbox" 参数</para>
@@ -143,7 +143,7 @@ namespace HeadlessChromiumTest.Common
         }
 
         /// <summary>
-        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2000</para>
+        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>△ 异常可能：程序运行目录下 Chromium 浏览器不可用。</para>
         /// </summary>
         /// <param name="args">要传递给 Chromium 浏览器实例的其他参数。（ 此方法会自动传入 "--no-sandbox" 参数 ）</param>
@@ -158,7 +158,7 @@ namespace HeadlessChromiumTest.Common
         }
 
         /// <summary>
-        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2000</para>
+        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>△ 异常可能：程序运行目录下 Chromium 浏览器不可用。</para>
         /// </summary>
         /// <param name="isDisplay">Chromium 运行时 是否显示界面</param>
@@ -174,7 +174,7 @@ namespace HeadlessChromiumTest.Common
         }
 
         /// <summary>
-        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2000</para>
+        /// <para>获取一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>△ 异常可能：程序运行目录下 Chromium 浏览器不可用。</para>
         /// </summary>
         /// <param name="checkIsDownload">检查 是否下载 Chromium 浏览器</param>
