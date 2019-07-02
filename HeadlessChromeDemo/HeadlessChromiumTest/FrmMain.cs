@@ -249,9 +249,10 @@ namespace HeadlessChromiumTest
 
                         string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
                         // 保存截图 1
-                        await ChromiumBrowser.SavePageScreenshotAsync(page, $"{SaveContent.SaveContentDirectory}{fileName}-1.png");
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, true, $"{SaveContent.SaveContentDirectory}{fileName}-1.png");
                         // 保存截图 2
                         await ChromiumBrowser.SavePageScreenshotAsync(page, null, $"{SaveContent.SaveContentDirectory}{fileName}-2.png");
+
                         // 获取并保存页面的 Html 内容
                         string htmlContent = await page.GetContentAsync();
                         SaveContent.SaveContentByCreate(htmlContent, $"{SaveContent.SaveContentDirectory}{fileName}.html");

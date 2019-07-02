@@ -323,11 +323,11 @@ namespace HeadlessChromiumTest.Common
         /// 保存 Page 页面截图
         /// </summary>
         /// <param name="page">Chromium 的 Page 对象</param>
-        /// <param name="path">保存截图的绝对路径 【 默认值：程序运行目录\SaveContent\{当前时间}.png 】</param>
         /// <param name="isFullPage">true 获取整个可滚动页面的屏幕截图；false 获取页面可见部分的屏幕截图。默认值：false</param>
+        /// <param name="path">保存截图的绝对路径 【 默认值：程序运行目录\SaveContent\{当前时间}.png 】</param>
         /// <returns></returns>
         public static async Task SavePageScreenshotAsync(Page page,
-            string path = null, bool isFullPage = false)
+            bool isFullPage = false, string path = null)
         {
             if (page == null)
             {
