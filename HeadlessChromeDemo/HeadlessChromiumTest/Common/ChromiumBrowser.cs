@@ -215,7 +215,7 @@ namespace HeadlessChromiumTest.Common
                 page = await browser.NewPageAsync();
             }
 
-            #region 定义属性（这里是为了绕过反反爬虫的js检测）
+            #region 定义浏览器页面属性（这里是为了绕过反爬虫的js检测）
             await page.SetUserAgentAsync("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
 
             string navigator_languages = @"
