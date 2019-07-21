@@ -297,15 +297,15 @@ namespace HeadlessChromiumTest.Common
                 };
             }";
 
-            await page.EvaluateOnNewDocumentAsync(navigator_languages);
-            await page.EvaluateOnNewDocumentAsync(navigator_webdriver);
-            await page.EvaluateOnNewDocumentAsync(navigator_connection_rtt);
-            await page.EvaluateOnNewDocumentAsync(navigator_plugins);
-            await page.EvaluateOnNewDocumentAsync(chrome);
-            await page.EvaluateOnNewDocumentAsync(window_chrome);
-            await page.EvaluateOnNewDocumentAsync(window_navigator_chrome);
-            await page.EvaluateOnNewDocumentAsync(window_navigator_permissions_query);
-            await page.EvaluateOnNewDocumentAsync(webGLRenderingContext_getParameter);
+            await page.EvaluateFunctionOnNewDocumentAsync(navigator_languages);
+            await page.EvaluateFunctionOnNewDocumentAsync(navigator_webdriver);
+            await page.EvaluateFunctionOnNewDocumentAsync(navigator_connection_rtt);
+            await page.EvaluateFunctionOnNewDocumentAsync(navigator_plugins);
+            await page.EvaluateFunctionOnNewDocumentAsync(chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(window_chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(window_navigator_chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(window_navigator_permissions_query);
+            await page.EvaluateFunctionOnNewDocumentAsync(webGLRenderingContext_getParameter);
             #endregion
 
             await page.SetViewportAsync(new ViewPortOptions

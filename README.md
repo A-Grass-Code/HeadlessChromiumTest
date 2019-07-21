@@ -1,11 +1,9 @@
 # HeadlessChromiumTest
-Chromium 无头浏览器测试 Demo
+**Chromium 无头浏览器测试 Demo**
 
-说明：
+### 说明：
 
-1. 开发（完成）平台：**Windows 10 x64 / Windows 7 x64 / Windows Server 2008 R2 x64**；
-
-   **.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
+1. 开发（完成）平台：**PuppeteerSharp 1.17.2**；**Windows 10 x64 / Windows 7 x64 / Windows Server 2008 R2 x64**；**.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
 
 2. 参考：
 
@@ -28,4 +26,18 @@ Chromium 无头浏览器测试 Demo
    - **`chromium-Win64-662092.zip`** ***百度云盘分享地址***  如下：
    - 链接：https://pan.baidu.com/s/156G-3tC9hohuBM8TgTeuWQ
    - 提取码：l83n
+   
 4. 从 **GitHub** 上获取代码后，可用 **VS 2017** 直接打开；还原 **NuGet** 包，并重新生成 **解决方案** 或 **项目**，即可调试运行。
+
+
+
+### **更新 Log :**
+
+##### ***2019-07-21  ==***
+
+1. `PuppeteerSharp` 更新至 `NuGet` 上的最新稳定版 `1.18.0` ；
+2. 对应的 `chromium` 更新：
+   - **`chromium-Win64-672088.zip`** ***百度云盘分享地址***  如下：
+   - 链接：https://pan.baidu.com/s/1xoCEwmJf-6HcJfdaVm2ntQ
+   - 提取码：q2ei
+3. 更新参考：https://www.nuget.org/packages/PuppeteerSharp/

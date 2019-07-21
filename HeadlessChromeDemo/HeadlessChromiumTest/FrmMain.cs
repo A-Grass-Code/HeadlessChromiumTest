@@ -222,11 +222,11 @@ namespace HeadlessChromiumTest
             });
         }
 
+        // 关闭窗口
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Environment.Exit(0);
         }
-
 
 
         // 无头浏览器测试，封装版
