@@ -7,7 +7,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HeadlessChromiumTest.Common
+namespace HeadlessChromium.Test.Common
 {
     public class ChromiumBrowser
     {
@@ -42,6 +42,28 @@ namespace HeadlessChromiumTest.Common
                 {
                     if (checkIsDownload)
                     {
+                        #region 下载地址 解析；参考于源代码：https://github.com/hardkoded/puppeteer-sharp/blob/37ea56934281209830254df3ec3ffe37c57cfac2/lib/PuppeteerSharp/BrowserFetcher.cs
+
+                        // https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/706915/chrome-win.zip 下载地址（ 样例 ）
+
+                        // const string DefaultDownloadHost = "https://storage.googleapis.com";
+                        // const int DefaultRevision = 706915;
+
+                        // [Platform.Linux] = "{0}/chromium-browser-snapshots/Linux_x64/{1}/{2}.zip",
+                        // [Platform.MacOS] = "{0}/chromium-browser-snapshots/Mac/{1}/{2}.zip",
+                        // [Platform.Win32] = "{0}/chromium-browser-snapshots/Win/{1}/{2}.zip",
+                        // [Platform.Win64] = "{0}/chromium-browser-snapshots/Win_x64/{1}/{2}.zip"
+
+                        // case Platform.Linux:
+                        //     return "chrome-linux";
+                        // case Platform.MacOS:
+                        //     return "chrome-mac";
+                        // case Platform.Win32:
+                        // case Platform.Win64:
+                        //     return revision > 591479 ? "chrome-win" : "chrome-win32";
+
+                        #endregion
+
                         // 检查 revisionInfo.Revision 这个版本的 Chromium 浏览器 是否 可下载
                         bool isCan = await browserFetcher.CanDownloadAsync(revisionInfo.Revision);
                         if (isCan)
@@ -191,7 +213,6 @@ namespace HeadlessChromiumTest.Common
         }
 
 
-
         /// <summary>
         /// 新建一个 Page（页面）并且初始化后再返回当前 Page 对象（页面）【避免js检测出 当前客户行为是无头浏览器自动化程序】
         /// </summary>
@@ -216,7 +237,7 @@ namespace HeadlessChromiumTest.Common
             }
 
             #region 定义浏览器页面属性（这里是为了绕过反爬虫的js检测）
-            await page.SetUserAgentAsync("Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36");
+            await page.SetUserAgentAsync("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36");
 
             string navigator_languages = @"
             () => {
@@ -318,7 +339,6 @@ namespace HeadlessChromiumTest.Common
         }
 
 
-
         /// <summary>
         /// 保存 Page 页面截图
         /// </summary>
@@ -329,29 +349,7 @@ namespace HeadlessChromiumTest.Common
         public static async Task SavePageScreenshotAsync(Page page,
             bool isFullPage = false, string path = null)
         {
-            if (page == null)
-            {
-                throw new Exception("传入了一个空的 Chromium Page 对象。Page == null");
-            }
-
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                path = SaveContent.SaveContentDirectory + $"{DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss.ffff")}.png";
-            }
-            else
-            {
-                if (!Directory.Exists(Path.GetDirectoryName(path)))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(path));
-                }
-
-                if (Path.GetExtension(path).ToLower() != ".png")
-                {
-                    path += ".png";
-                }
-            }
-
-            await page.ScreenshotAsync(path, new ScreenshotOptions() { FullPage = isFullPage });
+            await SavePageScreenshotAsync(page, new ScreenshotOptions() { FullPage = isFullPage }, path);
         }
 
         /// <summary>
@@ -393,7 +391,6 @@ namespace HeadlessChromiumTest.Common
 
             await page.ScreenshotAsync(path, screenshotOptions);
         }
-
 
     }
 }

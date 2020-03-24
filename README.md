@@ -1,7 +1,7 @@
 # HeadlessChromiumTest
 **Chromium 无头浏览器测试 Demo**
 
-### 说明：
+### 说明：（ 请参考最新的 *更新 Log* ）
 
 1. 开发（完成）平台：**PuppeteerSharp 1.17.2**；**Windows 10 x64 / Windows 7 x64 / Windows Server 2008 R2 x64**；**.NET Framework 4.7** ；**VS 2017**。（ 其他环境未测试 ）
 
@@ -31,7 +31,67 @@
 
 
 
-### **更新 Log :**
+
+
+### ***更新 Log* :**
+
+
+
+##### ***2020-03-24  ==***
+
+1. `PuppeteerSharp` 更新至 `NuGet` 上的最新稳定版 `2.0.2` ；
+
+2. 对应的 `chromium` 更新：
+
+   - **`chromium-Win64-706915`** ***百度云盘分享地址***  如下：
+   - 链接：https://pan.baidu.com/s/1FcmtNQbztADcCa0VXwnpZg
+   - 提取码：yj42
+
+3. 更新参考：https://www.nuget.org/packages/PuppeteerSharp/
+
+4. 说明一下，这次的代码更新，是在 **Windows 10 x64** 系统、 **VS 2019** 中完成的！
+
+5. 代码中增加 chromium 下载地址解析注释；
+
+   因为下载过程中可能 ***网络不行*** 导致卡死，所以研究了源代码的下载地址；
+
+   下面是在研究后的整理，在代码中已注释
+
+   ```c#
+   #region 下载地址 解析
+       // 参考于源代码：https://github.com/hardkoded/puppeteer-sharp/blob/37ea56934281209830254df3ec3ffe37c57cfac2/lib/PuppeteerSharp/BrowserFetcher.cs
+   
+       // https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/706915/chrome-win.zip 下载地址（ 样例 ）
+   
+       // const string DefaultDownloadHost = "https://storage.googleapis.com";
+       // const int DefaultRevision = 706915;
+   
+       // [Platform.Linux] = "{0}/chromium-browser-snapshots/Linux_x64/{1}/{2}.zip",
+       // [Platform.MacOS] = "{0}/chromium-browser-snapshots/Mac/{1}/{2}.zip",
+       // [Platform.Win32] = "{0}/chromium-browser-snapshots/Win/{1}/{2}.zip",
+       // [Platform.Win64] = "{0}/chromium-browser-snapshots/Win_x64/{1}/{2}.zip"
+   
+       // case Platform.Linux:
+       //     return "chrome-linux";
+       // case Platform.MacOS:
+       //     return "chrome-mac";
+       // case Platform.Win32:
+       // case Platform.Win64:
+       //     return revision > 591479 ? "chrome-win" : "chrome-win32";
+   #endregion
+   ```
+
+   下载后得到的压缩包，解压，然后按照下图创建目录，之后的你应该已经会了......
+
+   ![1585064060344](N:\GitHub-AGrass\Public\HeadlessChromiumTest\README.md-img\1585064060344.png)
+
+   
+
+6. 因为已经不再做这个相关的项目了，所以更新的很不及时，后面可能会更不及时！哈哈 ^_^ ...
+
+   其实这个 Demo 就是想分享给大家，也算是指一条路去走吧，至于走不走，走成什么样，那就看你的喽 ......
+
+
 
 ##### ***2019-07-21  ==***
 
@@ -41,3 +101,4 @@
    - 链接：https://pan.baidu.com/s/1xoCEwmJf-6HcJfdaVm2ntQ
    - 提取码：q2ei
 3. 更新参考：https://www.nuget.org/packages/PuppeteerSharp/
+

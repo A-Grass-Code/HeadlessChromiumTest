@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B45C444A-2C74-4EAB-8DEB-5D97A886CB1E}</ProjectGuid>
+    <ProjectGuid>{7D422814-B487-444F-BA29-269A085F139E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>HeadlessChromiumTest</RootNamespace>
-    <AssemblyName>HeadlessChromiumTest</AssemblyName>
+    <RootNamespace>HeadlessChromium.Test</RootNamespace>
+    <AssemblyName>HeadlessChromium.Test</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -58,7 +58,7 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PuppeteerSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PuppeteerSharp.1.18.0\lib\netstandard2.0\PuppeteerSharp.dll</HintPath>
+      <HintPath>..\packages\PuppeteerSharp.2.0.2\lib\netstandard2.0\PuppeteerSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">

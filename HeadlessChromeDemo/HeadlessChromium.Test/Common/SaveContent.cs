@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HeadlessChromiumTest.Common
+namespace HeadlessChromium.Test.Common
 {
     public class SaveContent
     {

@@ -1,4 +1,4 @@
-﻿namespace HeadlessChromiumTest
+﻿namespace HeadlessChromium.Test
 {
     partial class FrmMain
     {

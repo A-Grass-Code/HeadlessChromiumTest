@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HeadlessChromiumTest.Properties
+namespace HeadlessChromium.Test.Properties
 {
 
 

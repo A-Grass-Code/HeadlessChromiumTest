@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HeadlessChromiumTest.Common
+namespace HeadlessChromium.Test.Common
 {
     public static class OSHelper
     {

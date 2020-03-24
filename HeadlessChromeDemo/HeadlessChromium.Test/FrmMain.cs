@@ -1,4 +1,4 @@
-﻿using HeadlessChromiumTest.Common;
+﻿using HeadlessChromium.Test.Common;
 using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace HeadlessChromiumTest
+namespace HeadlessChromium.Test
 {
     public partial class FrmMain : Form
     {
@@ -163,6 +163,28 @@ namespace HeadlessChromiumTest
 
                 BrowserFetcher browserFetcher = Puppeteer.CreateBrowserFetcher(new BrowserFetcherOptions());
                 RevisionInfo revisionInfo = browserFetcher.RevisionInfo(BrowserFetcher.DefaultRevision);
+
+                #region 下载地址 解析；参考于源代码：https://github.com/hardkoded/puppeteer-sharp/blob/37ea56934281209830254df3ec3ffe37c57cfac2/lib/PuppeteerSharp/BrowserFetcher.cs
+
+                // https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/706915/chrome-win.zip 下载地址（ 样例 ）
+
+                // const string DefaultDownloadHost = "https://storage.googleapis.com";
+                // const int DefaultRevision = 706915;
+
+                // [Platform.Linux] = "{0}/chromium-browser-snapshots/Linux_x64/{1}/{2}.zip",
+                // [Platform.MacOS] = "{0}/chromium-browser-snapshots/Mac/{1}/{2}.zip",
+                // [Platform.Win32] = "{0}/chromium-browser-snapshots/Win/{1}/{2}.zip",
+                // [Platform.Win64] = "{0}/chromium-browser-snapshots/Win_x64/{1}/{2}.zip"
+
+                // case Platform.Linux:
+                //     return "chrome-linux";
+                // case Platform.MacOS:
+                //     return "chrome-mac";
+                // case Platform.Win32:
+                // case Platform.Win64:
+                //     return revision > 591479 ? "chrome-win" : "chrome-win32";
+
+                #endregion
 
                 if (revisionInfo.Downloaded && revisionInfo.Local)
                 {
