@@ -83,7 +83,7 @@
 
    下载后得到的压缩包，解压，然后按照下图创建目录，之后的你应该已经会了......
 
-   [截图说明]: https://github.com/A-Grass-Code/HeadlessChromiumTest/blob/master/README.md-img/1585064060344.png
+   ![1585064060344](N:\GitHub-AGrass\Public\HeadlessChromiumTest\README.md-img\1585064060344.png)
 
    
 
