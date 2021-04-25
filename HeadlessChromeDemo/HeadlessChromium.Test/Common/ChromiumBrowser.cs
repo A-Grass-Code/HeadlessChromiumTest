@@ -11,6 +11,91 @@ namespace HeadlessChromium.Test.Common
 {
     public class ChromiumBrowser
     {
+        #region 定义浏览器页面属性的字符串脚本（为了绕过反爬虫的js检测）
+
+        private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.46";
+
+        private const string _navigator_languages = @"
+        () => {
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['zh-CN', 'en-US', 'en'],
+            });
+        }";
+
+        private const string _navigator_webdriver = @"
+        () => {
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => false,
+            });
+        }";
+
+        private const string _navigator_connection_rtt = @"
+        () => {
+            Object.defineProperty(navigator.connection, 'rtt', {
+                get: () => 50,
+            });
+        }";
+
+        private const string _navigator_plugins = @"
+        () => {
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => {
+                    var ChromiumPDFPlugin = {};
+                    ChromiumPDFPlugin.__proto__ = Plugin.prototype;
+                    var plugins = {
+                        0: ChromiumPDFPlugin,
+                        description: 'Portable Document Format',
+                        filename: 'internal-pdf-viewer',
+                        length: 1,
+                        name: 'Chromium PDF Plugin',
+                        __proto__: PluginArray.prototype,
+                    };
+                    return plugins;
+                },
+            });
+        }";
+
+        private const string _chrome = @"
+        () => {
+            chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
+        }";
+
+        private const string _window_chrome = @"
+        () => {
+            window.chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
+        }";
+
+        private const string _window_navigator_chrome = @"
+        () => {
+            window.navigator.chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
+        }";
+
+        private const string _window_navigator_permissions_query = @"
+        () => {
+            const originalQuery = window.navigator.permissions.query;
+            return window.navigator.permissions.query = (parameters) => (
+                parameters.name === 'notifications' ? Promise.resolve({ state: Notification.permission }) : originalQuery(parameters)
+            );
+        }";
+
+        private const string _webGLRenderingContext_getParameter = @"
+        () => {
+            const getParameter = WebGLRenderingContext.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                // UNMASKED_VENDOR_WEBGL
+                if (parameter === 37445) {
+                  return 'Intel Open Source Technology Center';
+                }
+                // UNMASKED_RENDERER_WEBGL
+                if (parameter === 37446) {
+                  return 'Mesa DRI Intel(R) Ivybridge Mobile';
+                }
+                return getParameter(parameter);
+            };
+        }";
+
+        #endregion
+
 
         /// <summary>
         /// <para>设置一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
@@ -35,35 +120,13 @@ namespace HeadlessChromium.Test.Common
             return await Task.Run(async () =>
             {
                 BrowserFetcher browserFetcher = Puppeteer.CreateBrowserFetcher(new BrowserFetcherOptions());
-                RevisionInfo revisionInfo = browserFetcher.RevisionInfo(BrowserFetcher.DefaultRevision);
+                RevisionInfo revisionInfo = browserFetcher.RevisionInfo(BrowserFetcher.DefaultChromiumRevision);
 
                 #region 检查下载 Chromium
                 if (!(revisionInfo.Downloaded && revisionInfo.Local))
                 {
                     if (checkIsDownload)
                     {
-                        #region 下载地址 解析；参考于源代码：https://github.com/hardkoded/puppeteer-sharp/blob/37ea56934281209830254df3ec3ffe37c57cfac2/lib/PuppeteerSharp/BrowserFetcher.cs
-
-                        // https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/706915/chrome-win.zip 下载地址（ 样例 ）
-
-                        // const string DefaultDownloadHost = "https://storage.googleapis.com";
-                        // const int DefaultRevision = 706915;
-
-                        // [Platform.Linux] = "{0}/chromium-browser-snapshots/Linux_x64/{1}/{2}.zip",
-                        // [Platform.MacOS] = "{0}/chromium-browser-snapshots/Mac/{1}/{2}.zip",
-                        // [Platform.Win32] = "{0}/chromium-browser-snapshots/Win/{1}/{2}.zip",
-                        // [Platform.Win64] = "{0}/chromium-browser-snapshots/Win_x64/{1}/{2}.zip"
-
-                        // case Platform.Linux:
-                        //     return "chrome-linux";
-                        // case Platform.MacOS:
-                        //     return "chrome-mac";
-                        // case Platform.Win32:
-                        // case Platform.Win64:
-                        //     return revision > 591479 ? "chrome-win" : "chrome-win32";
-
-                        #endregion
-
                         // 检查 revisionInfo.Revision 这个版本的 Chromium 浏览器 是否 可下载
                         bool isCan = await browserFetcher.CanDownloadAsync(revisionInfo.Revision);
                         if (isCan)
@@ -126,7 +189,7 @@ namespace HeadlessChromium.Test.Common
                 {
                     argss = new string[] { "--no-sandbox" };
                 }
-                launchOptions.Args = argss; //这些参数将会传递给 Chromium
+                launchOptions.Args = argss; // 这些参数将会传递给 Chromium
                 #endregion
 
                 #region 设置 IgnoredDefaultArgs 参数
@@ -141,7 +204,7 @@ namespace HeadlessChromium.Test.Common
                 {
                     defaultArgs = new string[] { "--enable-automation" };
                 }
-                launchOptions.IgnoredDefaultArgs = defaultArgs; //这些参数将被 Chromium 忽略
+                launchOptions.IgnoredDefaultArgs = defaultArgs; // 这些参数将被 Chromium 忽略
                 #endregion
 
                 launchOptions.Headless = !isDisplay; // Headless : true 是无头模式，无界面；false，有界面
@@ -217,15 +280,17 @@ namespace HeadlessChromium.Test.Common
         /// 新建一个 Page（页面）并且初始化后再返回当前 Page 对象（页面）【避免js检测出 当前客户行为是无头浏览器自动化程序】
         /// </summary>
         /// <param name="browser"></param>
+        /// <param name="pageWidth">页面显示区的 宽 px</param>
+        /// <param name="pageHeight">页面显示区的 高 px</param>
         /// <returns></returns>
-        public static async Task<Page> NewPageAndInitAsync(Browser browser)
+        public static async Task<Page> NewPageAndInitAsync(Browser browser, int pageWidth = 820, int pageHeight = 820)
         {
             if (browser == null)
             {
                 throw new Exception("传入了一个空的 Chromium 浏览器对象。Browser == null");
             }
 
-            Page page = default(Page);
+            Page page;
             Page[] pages = await browser.PagesAsync();
             if (pages != null && pages.Length == 1 && pages[0].Url == "about:blank")
             {
@@ -237,102 +302,22 @@ namespace HeadlessChromium.Test.Common
             }
 
             #region 定义浏览器页面属性（这里是为了绕过反爬虫的js检测）
-            await page.SetUserAgentAsync("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36");
-
-            string navigator_languages = @"
-            () => {
-                Object.defineProperty(navigator, 'languages', {
-                    get: () => ['zh-CN', 'en-US', 'en'],
-                });
-            }";
-
-            string navigator_webdriver = @"
-            () => {
-                Object.defineProperty(navigator, 'webdriver', {
-                    get: () => false,
-                });
-            }";
-
-            string navigator_connection_rtt = @"
-            () => {
-                Object.defineProperty(navigator.connection, 'rtt', {
-                    get: () => 50,
-                });
-            }";
-
-            string navigator_plugins = @"
-            () => {
-                Object.defineProperty(navigator, 'plugins', {
-                    get: () => {
-                        var ChromiumPDFPlugin = {};
-                        ChromiumPDFPlugin.__proto__ = Plugin.prototype;
-                        var plugins = {
-                            0: ChromiumPDFPlugin,
-                            description: 'Portable Document Format',
-                            filename: 'internal-pdf-viewer',
-                            length: 1,
-                            name: 'Chromium PDF Plugin',
-                            __proto__: PluginArray.prototype,
-                        };
-                        return plugins;
-                    },
-                });
-            }";
-
-            string chrome = @"
-            () => {
-                chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
-            }";
-
-            string window_chrome = @"
-            () => {
-                window.chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
-            }";
-
-            string window_navigator_chrome = @"
-            () => {
-                window.navigator.chrome = { 'app': { 'isInstalled': false }, 'webstore': { 'onInstallStageChanged': {}, 'onDownloadProgress': {} }, 'runtime': { 'PlatformOs': { 'MAC': 'mac', 'WIN': 'win', 'ANDROID': 'android', 'CROS': 'cros', 'LINUX': 'linux', 'OPENBSD': 'openbsd' }, 'PlatformArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'PlatformNaclArch': { 'ARM': 'arm', 'X86_32': 'x86-32', 'X86_64': 'x86-64' }, 'RequestUpdateCheckStatus': { 'THROTTLED': 'throttled', 'NO_UPDATE': 'no_update', 'UPDATE_AVAILABLE': 'update_available' }, 'OnInstalledReason': { 'INSTALL': 'install', 'UPDATE': 'update', 'CHROME_UPDATE': 'chrome_update', 'SHARED_MODULE_UPDATE': 'shared_module_update' }, 'OnRestartRequiredReason': { 'APP_UPDATE': 'app_update', 'OS_UPDATE': 'os_update', 'PERIODIC': 'periodic' } } };
-            }";
-
-            string window_navigator_permissions_query = @"
-            () => {
-                const originalQuery = window.navigator.permissions.query;
-                return window.navigator.permissions.query = (parameters) => (
-                    parameters.name === 'notifications' ? Promise.resolve({ state: Notification.permission }) : originalQuery(parameters)
-                );
-            }";
-
-            string webGLRenderingContext_getParameter = @"
-            () => {
-                const getParameter = WebGLRenderingContext.getParameter;
-                WebGLRenderingContext.prototype.getParameter = function(parameter) {
-                    // UNMASKED_VENDOR_WEBGL
-                    if (parameter === 37445) {
-                      return 'Intel Open Source Technology Center';
-                    }
-                    // UNMASKED_RENDERER_WEBGL
-                    if (parameter === 37446) {
-                      return 'Mesa DRI Intel(R) Ivybridge Mobile';
-                    }
-                    return getParameter(parameter);
-                };
-            }";
-
-            await page.EvaluateFunctionOnNewDocumentAsync(navigator_languages);
-            await page.EvaluateFunctionOnNewDocumentAsync(navigator_webdriver);
-            await page.EvaluateFunctionOnNewDocumentAsync(navigator_connection_rtt);
-            await page.EvaluateFunctionOnNewDocumentAsync(navigator_plugins);
-            await page.EvaluateFunctionOnNewDocumentAsync(chrome);
-            await page.EvaluateFunctionOnNewDocumentAsync(window_chrome);
-            await page.EvaluateFunctionOnNewDocumentAsync(window_navigator_chrome);
-            await page.EvaluateFunctionOnNewDocumentAsync(window_navigator_permissions_query);
-            await page.EvaluateFunctionOnNewDocumentAsync(webGLRenderingContext_getParameter);
+            await page.SetUserAgentAsync(_userAgent);
+            await page.EvaluateFunctionOnNewDocumentAsync(_navigator_languages);
+            await page.EvaluateFunctionOnNewDocumentAsync(_navigator_webdriver);
+            await page.EvaluateFunctionOnNewDocumentAsync(_navigator_connection_rtt);
+            await page.EvaluateFunctionOnNewDocumentAsync(_navigator_plugins);
+            await page.EvaluateFunctionOnNewDocumentAsync(_chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(_window_chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(_window_navigator_chrome);
+            await page.EvaluateFunctionOnNewDocumentAsync(_window_navigator_permissions_query);
+            await page.EvaluateFunctionOnNewDocumentAsync(_webGLRenderingContext_getParameter);
             #endregion
 
             await page.SetViewportAsync(new ViewPortOptions
             {
-                Width = 820,
-                Height = 820
+                Width = pageWidth,
+                Height = pageHeight
             });
 
             return page;

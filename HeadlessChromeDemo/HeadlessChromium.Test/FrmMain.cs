@@ -30,7 +30,7 @@ namespace HeadlessChromium.Test
         /// <summary>
         /// 保存页面的目录
         /// </summary>
-        private string _savePageDirectory
+        private string SavePageDirectory
         {
             get
             {
@@ -107,15 +107,15 @@ namespace HeadlessChromium.Test
 
                     string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
                     // 保存截图
-                    await page.ScreenshotAsync($"{_savePageDirectory}{fileName}.png");
+                    await page.ScreenshotAsync($"{SavePageDirectory}{fileName}.png");
                     // 获取并返回页面的 Html 内容
                     htmlContent = await page.GetContentAsync();
                     // 保存 Html 内容
-                    WriteCreate($"{_savePageDirectory}{fileName}.html", htmlContent);
+                    WriteCreate($"{SavePageDirectory}{fileName}.html", htmlContent);
 
                     this.Invoke(new Action(() =>
                     {
-                        this.rTxt_log.AppendText($"测试页面已保存成功。目录 ==> {_savePageDirectory} \n");
+                        this.rTxt_log.AppendText($"测试页面已保存成功。目录 ==> {SavePageDirectory} \n");
                     }));
 
                     // 界面停留，给开发人员看
@@ -162,29 +162,7 @@ namespace HeadlessChromium.Test
                 #region 无头浏览器下载更新
 
                 BrowserFetcher browserFetcher = Puppeteer.CreateBrowserFetcher(new BrowserFetcherOptions());
-                RevisionInfo revisionInfo = browserFetcher.RevisionInfo(BrowserFetcher.DefaultRevision);
-
-                #region 下载地址 解析；参考于源代码：https://github.com/hardkoded/puppeteer-sharp/blob/37ea56934281209830254df3ec3ffe37c57cfac2/lib/PuppeteerSharp/BrowserFetcher.cs
-
-                // https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/706915/chrome-win.zip 下载地址（ 样例 ）
-
-                // const string DefaultDownloadHost = "https://storage.googleapis.com";
-                // const int DefaultRevision = 706915;
-
-                // [Platform.Linux] = "{0}/chromium-browser-snapshots/Linux_x64/{1}/{2}.zip",
-                // [Platform.MacOS] = "{0}/chromium-browser-snapshots/Mac/{1}/{2}.zip",
-                // [Platform.Win32] = "{0}/chromium-browser-snapshots/Win/{1}/{2}.zip",
-                // [Platform.Win64] = "{0}/chromium-browser-snapshots/Win_x64/{1}/{2}.zip"
-
-                // case Platform.Linux:
-                //     return "chrome-linux";
-                // case Platform.MacOS:
-                //     return "chrome-mac";
-                // case Platform.Win32:
-                // case Platform.Win64:
-                //     return revision > 591479 ? "chrome-win" : "chrome-win32";
-
-                #endregion
+                RevisionInfo revisionInfo = browserFetcher.RevisionInfo(BrowserFetcher.DefaultChromiumRevision);
 
                 if (revisionInfo.Downloaded && revisionInfo.Local)
                 {
@@ -201,7 +179,7 @@ namespace HeadlessChromium.Test
                         this.rTxt_log.AppendText("正在检查更新... \n");
                     }));
 
-                    // 检查 revisionInfo.Revision 这个版本的 Chromium 浏览器 是否 可用\可下载
+                    // 检查 revisionInfo.Revision 这个版本的 Chromium 浏览器 是否 可下载
                     bool isCan = await browserFetcher.CanDownloadAsync(revisionInfo.Revision);
                     if (!isCan)
                     {
@@ -247,7 +225,7 @@ namespace HeadlessChromium.Test
         // 关闭窗口
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            System.Environment.Exit(0);
+            Environment.Exit(0);
         }
 
 
@@ -288,7 +266,6 @@ namespace HeadlessChromium.Test
                 }));
             });
         }
-
 
     }
 }
