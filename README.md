@@ -39,7 +39,7 @@
 
 ##### ***2021-04-27  ==***
 
-1. 更新时环境：Windows 10 x64，VS 2019；
+1. 更新时环境：Windows 10 x64，VS 2019，.NET Framework 4.8；
 2. `PuppeteerSharp` 更新至 `NuGet` 上的最新稳定版 `4.0.0` ；
 3. 优化已有的代码；
 4. `PuppeteerSharp 4.0.0` 对应的 Chromium 浏览器
