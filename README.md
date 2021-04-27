@@ -37,6 +37,19 @@
 
 
 
+##### ***2021-04-27  ==***
+
+1. 更新时环境：Windows 10 x64，VS 2019；
+2. `PuppeteerSharp` 更新至 `NuGet` 上的最新稳定版 `4.0.0` ；
+3. 优化已有的代码；
+4. `PuppeteerSharp 4.0.0` 对应的 Chromium 浏览器
+   - **`chromium-Win64-848005.zip`** ***百度云盘分享地址***  如下：
+   - 链接：https://pan.baidu.com/s/1CSlM7kep6RxIDa89zjj7jA
+   - 提取码：ujq1
+5. 注意：之前的更新Log可能并不适用于本次更新。
+
+
+
 ##### ***2020-03-24  ==***
 
 1. `PuppeteerSharp` 更新至 `NuGet` 上的最新稳定版 `2.0.2` ；
