@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace HeadlessChromium.Test.Common
 {
-    public class ChromiumBrowser
+    public static class ChromiumBrowser
     {
         #region 定义浏览器页面属性的字符串脚本（为了绕过反爬虫的js检测）
 
-        private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.46";
+        private const string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36 Edg/96.0.1054.57";
 
         private const string _navigator_languages = @"
         () => {
@@ -177,6 +177,8 @@ namespace HeadlessChromium.Test.Common
                 }
                 #endregion
 
+                launchOptions.Headless = !isDisplay; // Headless : true 是无头模式，无界面；false，有界面
+
                 #region 设置 Args 参数
                 string[] argss = default(string[]);
                 if (args != null && args.Length > 0)
@@ -207,8 +209,23 @@ namespace HeadlessChromium.Test.Common
                 launchOptions.IgnoredDefaultArgs = defaultArgs; // 这些参数将被 Chromium 忽略
                 #endregion
 
-                launchOptions.Headless = !isDisplay; // Headless : true 是无头模式，无界面；false，有界面
                 return launchOptions;
+            });
+        }
+
+
+        /// <summary>
+        /// 获取本机 Chrome 浏览器
+        /// </summary>
+        /// <param name="chromeBrowserPath">本机 Chrome 浏览器的绝对路径</param>
+        /// <param name="isDisplay">Chrome 运行时 是否显示界面；默认 true</param>
+        /// <returns></returns>
+        public static Task<LaunchOptions> GetNativeChromeBrowser(string chromeBrowserPath, bool isDisplay = true)
+        {
+            return Task.FromResult(new LaunchOptions()
+            {
+                ExecutablePath = chromeBrowserPath,
+                Headless = !isDisplay // Headless : true 是无头模式，无界面；false，有界面
             });
         }
 
@@ -376,6 +393,5 @@ namespace HeadlessChromium.Test.Common
 
             await page.ScreenshotAsync(path, screenshotOptions);
         }
-
     }
 }
