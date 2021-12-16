@@ -1,4 +1,4 @@
-﻿using HeadlessChromium.Test.Common;
+using HeadlessChromium.Test.Common;
 using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
@@ -267,5 +267,42 @@ namespace HeadlessChromium.Test
             });
         }
 
+        // 本地 Chrome 浏览器测试
+        private void btn_nativeChromeTest_Click(object sender, EventArgs e)
+        {
+            this.Invoke(new Action(() =>
+            {
+                this.btn_nativeChromeTest.Enabled = false;
+            }));
+
+            Task.Run(async () =>
+            {
+                LaunchOptions launchOptions = await ChromiumBrowser.GetNativeChromeBrowser(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe");
+                using (Browser browser = await Puppeteer.LaunchAsync(launchOptions))
+                {
+                    using (Page page = await ChromiumBrowser.NewPageAndInitAsync(browser))
+                    {
+                        // 导航到 url 页
+                        await page.GoToAsync(_testUrl);
+
+                        string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH.mm.ss");
+                        // 保存截图 1
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, true, $"{SaveContent.SaveContentDirectory}{fileName}-1.png");
+                        // 保存截图 2
+                        await ChromiumBrowser.SavePageScreenshotAsync(page, null, $"{SaveContent.SaveContentDirectory}{fileName}-2.png");
+
+                        // 获取并保存页面的 Html 内容
+                        string htmlContent = await page.GetContentAsync();
+                        SaveContent.SaveContentByCreate(htmlContent, $"{SaveContent.SaveContentDirectory}{fileName}.html");
+                    }
+                }
+            }).ContinueWith(t =>
+            {
+                this.Invoke(new Action(() =>
+                {
+                    this.btn_nativeChromeTest.Enabled = true;
+                }));
+            });
+        }
     }
 }
