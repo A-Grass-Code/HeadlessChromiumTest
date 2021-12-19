@@ -98,6 +98,55 @@ namespace HeadlessChromium.Test.Common
 
 
         /// <summary>
+        /// 给 LaunchOptions 对象 设置一些默认的参数
+        /// </summary>
+        /// <param name="launchOptions"></param>
+        /// <param name="args">要传递给 Chromium 浏览器实例的其他参数。（ 此方法会自动传入 "--no-sandbox" 参数 ）
+        /// <para>参考：https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox </para>
+        /// </param>
+        /// <param name="ignoredDefaultArgs">如果给出数组，则过滤掉给定的 Puppeteer.DefaultArgs 默认参数。
+        /// （ 此方法会自动设置 "--enable-automation" 过滤掉这个参数 ）
+        /// <para>参考：https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox </para>
+        /// </param>
+        /// <returns></returns>
+        private static LaunchOptions SetDefaultLaunchOptionsParams(LaunchOptions launchOptions, string[] args, string[] ignoredDefaultArgs)
+        {
+            // 设置 Args 参数
+            {
+                string[] argss;
+                if (args != null && args.Length > 0)
+                {
+                    List<string> argsList = args.ToList<string>();
+                    argsList.Add("--no-sandbox");
+                    argss = argsList.ToArray();
+                }
+                else
+                {
+                    argss = new string[] { "--no-sandbox" };
+                }
+                launchOptions.Args = argss; // 这些参数将会传递给 Chromium
+            }
+
+            // 设置 IgnoredDefaultArgs 参数
+            {
+                string[] defaultArgs;
+                if (ignoredDefaultArgs != null && ignoredDefaultArgs.Length > 0)
+                {
+                    List<string> ignoredDefaultArgsList = ignoredDefaultArgs.ToList<string>();
+                    ignoredDefaultArgsList.Add("--enable-automation");
+                    defaultArgs = ignoredDefaultArgsList.ToArray();
+                }
+                else
+                {
+                    defaultArgs = new string[] { "--enable-automation" };
+                }
+                launchOptions.IgnoredDefaultArgs = defaultArgs; // 这些参数将被 Chromium 忽略
+            }
+
+            return launchOptions;
+        }
+
+        /// <summary>
         /// <para>设置一个 Chromium 浏览器 启动选项 的对象，并返回这个对象；此方法兼容 Windows7 / Windows Server 2008</para>
         /// <para>异常可能：程序运行目录下 Chromium 浏览器不可用。</para>
         /// </summary>
@@ -179,53 +228,9 @@ namespace HeadlessChromium.Test.Common
 
                 launchOptions.Headless = !isDisplay; // Headless : true 是无头模式，无界面；false，有界面
 
-                #region 设置 Args 参数
-                string[] argss = default(string[]);
-                if (args != null && args.Length > 0)
-                {
-                    List<string> argsList = args.ToList<string>();
-                    argsList.Add("--no-sandbox");
-                    argss = argsList.ToArray();
-                }
-                else
-                {
-                    argss = new string[] { "--no-sandbox" };
-                }
-                launchOptions.Args = argss; // 这些参数将会传递给 Chromium
-                #endregion
-
-                #region 设置 IgnoredDefaultArgs 参数
-                string[] defaultArgs = default(string[]);
-                if (ignoredDefaultArgs != null && ignoredDefaultArgs.Length > 0)
-                {
-                    List<string> ignoredDefaultArgsList = ignoredDefaultArgs.ToList<string>();
-                    ignoredDefaultArgsList.Add("--enable-automation");
-                    defaultArgs = ignoredDefaultArgsList.ToArray();
-                }
-                else
-                {
-                    defaultArgs = new string[] { "--enable-automation" };
-                }
-                launchOptions.IgnoredDefaultArgs = defaultArgs; // 这些参数将被 Chromium 忽略
-                #endregion
+                launchOptions = SetDefaultLaunchOptionsParams(launchOptions, args, ignoredDefaultArgs);
 
                 return launchOptions;
-            });
-        }
-
-
-        /// <summary>
-        /// 获取本机 Chrome 浏览器
-        /// </summary>
-        /// <param name="chromeBrowserPath">本机 Chrome 浏览器的绝对路径</param>
-        /// <param name="isDisplay">Chrome 运行时 是否显示界面；默认 true</param>
-        /// <returns></returns>
-        public static Task<LaunchOptions> GetNativeChromeBrowser(string chromeBrowserPath, bool isDisplay = true)
-        {
-            return Task.FromResult(new LaunchOptions()
-            {
-                ExecutablePath = chromeBrowserPath,
-                Headless = !isDisplay // Headless : true 是无头模式，无界面；false，有界面
             });
         }
 
@@ -294,6 +299,50 @@ namespace HeadlessChromium.Test.Common
 
 
         /// <summary>
+        /// 获取本机 Chrome 浏览器
+        /// </summary>
+        /// <param name="chromeBrowserPath">本机 Chrome 浏览器的绝对路径</param>
+        /// <param name="isDisplay">Chrome 运行时 是否显示界面；默认 true</param>
+        /// <returns></returns>
+        public static Task<LaunchOptions> GetNativeChromeBrowser(string chromeBrowserPath, bool isDisplay = true)
+        {
+            return Task.FromResult(new LaunchOptions()
+            {
+                ExecutablePath = chromeBrowserPath,
+                Headless = !isDisplay // Headless : true 是无头模式，无界面；false，有界面
+            });
+        }
+
+        /// <summary>
+        /// 获取本机 Chrome 浏览器
+        /// </summary>
+        /// <param name="isDisplay">Chrome 运行时 是否显示界面</param>
+        /// <param name="chromeBrowserPath">本机 Chrome 浏览器的绝对路径</param>
+        /// <param name="args">要传递给 Chromium 浏览器实例的其他参数。（ 此方法会自动传入 "--no-sandbox" 参数 ）
+        /// <para>参考：https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox </para>
+        /// </param>
+        /// <param name="ignoredDefaultArgs">如果给出数组，则过滤掉给定的 Puppeteer.DefaultArgs 默认参数。
+        /// （ 此方法会自动设置 "--enable-automation" 过滤掉这个参数 ）
+        /// <para>参考：https://peter.sh/experiments/chromium-command-line-switches/#no-sandbox </para>
+        /// </param>
+        /// <returns></returns>
+        public static Task<LaunchOptions> GetNativeChromeBrowser(bool isDisplay, string chromeBrowserPath,
+            string[] args = null,
+            string[] ignoredDefaultArgs = null)
+        {
+            LaunchOptions launchOptions = new LaunchOptions()
+            {
+                ExecutablePath = chromeBrowserPath,
+                Headless = !isDisplay // Headless : true 是无头模式，无界面；false，有界面
+            };
+
+            launchOptions = SetDefaultLaunchOptionsParams(launchOptions, args, ignoredDefaultArgs);
+
+            return Task.FromResult(launchOptions);
+        }
+
+
+        /// <summary>
         /// 新建一个 Page（页面）并且初始化后再返回当前 Page 对象（页面）【避免js检测出 当前客户行为是无头浏览器自动化程序】
         /// </summary>
         /// <param name="browser"></param>
@@ -339,7 +388,6 @@ namespace HeadlessChromium.Test.Common
 
             return page;
         }
-
 
         /// <summary>
         /// 保存 Page 页面截图

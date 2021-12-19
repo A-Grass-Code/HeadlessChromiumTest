@@ -55,7 +55,7 @@ namespace HeadlessChromium.Test
             this.rTxt_log.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rTxt_log.Name = "rTxt_log";
             this.rTxt_log.ReadOnly = true;
-            this.rTxt_log.Size = new System.Drawing.Size(558, 295);
+            this.rTxt_log.Size = new System.Drawing.Size(646, 295);
             this.rTxt_log.TabIndex = 1;
             this.rTxt_log.Text = "";
             // 
@@ -87,9 +87,9 @@ namespace HeadlessChromium.Test
             this.btn_nativeChromeTest.Location = new System.Drawing.Point(379, 14);
             this.btn_nativeChromeTest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_nativeChromeTest.Name = "btn_nativeChromeTest";
-            this.btn_nativeChromeTest.Size = new System.Drawing.Size(192, 43);
+            this.btn_nativeChromeTest.Size = new System.Drawing.Size(280, 43);
             this.btn_nativeChromeTest.TabIndex = 4;
-            this.btn_nativeChromeTest.Text = "本地 Chrome 浏览器测试";
+            this.btn_nativeChromeTest.Text = "本地 Chrome 浏览器（Edge） 测试";
             this.btn_nativeChromeTest.UseVisualStyleBackColor = true;
             this.btn_nativeChromeTest.Click += new System.EventHandler(this.btn_nativeChromeTest_Click);
             // 
@@ -97,7 +97,7 @@ namespace HeadlessChromium.Test
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 412);
+            this.ClientSize = new System.Drawing.Size(672, 412);
             this.Controls.Add(this.btn_nativeChromeTest);
             this.Controls.Add(this.btn_chromiumTest_Encapsulated);
             this.Controls.Add(this.label1);

@@ -27,6 +27,8 @@ namespace HeadlessChromium.Test
         /// </summary>
         private const string _testUrl = "https://hanyu.baidu.com/s?wd=%E8%85%BE&ptype=zici";
 
+        private const string _nativeEdgePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
+
         /// <summary>
         /// 保存页面的目录
         /// </summary>
@@ -277,7 +279,7 @@ namespace HeadlessChromium.Test
 
             Task.Run(async () =>
             {
-                LaunchOptions launchOptions = await ChromiumBrowser.GetNativeChromeBrowser(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe");
+                LaunchOptions launchOptions = await ChromiumBrowser.GetNativeChromeBrowser(_nativeEdgePath);
                 using (Browser browser = await Puppeteer.LaunchAsync(launchOptions))
                 {
                     using (Page page = await ChromiumBrowser.NewPageAndInitAsync(browser))
